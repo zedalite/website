@@ -26,10 +26,11 @@ jobs:
         run: |
           npm run build
 
-      - name: Upload Artifacts
-        uses: actions/upload-pages-artifact@v2
+
+      - uses: actions/upload-artifact@v4
+        id: artifact-upload-step
         with:
-          # this should match the `pages` option in your adapter-static options
+          name: static-website-files
           path: 'build/'
 
   deploy:
@@ -45,6 +46,11 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa.pub
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
-      - name: copy builds to server
+
+      - name: Get files
+        uses: actions/download-artifact@v4
+        with:
+          name: static-website-files
+      - name: Send files to host server
         run: |
-          rsync -vrm  .output/* ${{ secrets.USER_IP }}:/website/zedalite.de/html
+          rsync --archive --verbose --stats . ${{ secrets.USER_IP }}:/home/quoteapp/website/zedalite.de/html
