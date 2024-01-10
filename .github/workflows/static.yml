@@ -47,9 +47,10 @@ jobs:
           chmod 600 ~/.ssh/id_rsa.pub
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
 
-      - name: Send Website Files to Server
+      - name: Get files
         uses: actions/download-artifact@v4
         with:
           name: static-website-files
+      - name: Send files to host server
       - run: |
-          rsync -vr /* ${{ secrets.USER_IP }}:/home/quoteapp/website/zedalite.de/html
+          rsync --archive --verbose --stats . ${{ secrets.USER_IP }}:/home/quoteapp/website/zedalite.de/html
