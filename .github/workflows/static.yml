@@ -26,10 +26,11 @@ jobs:
         run: |
           npm run build
 
-      - name: Upload Artifacts
-        uses: actions/upload-pages-artifact@v2
+
+      - uses: actions/upload-artifact@v4
+        id: artifact-upload-step
         with:
-          # this should match the `pages` option in your adapter-static options
+          name: my-artifact
           path: 'build/'
 
   deploy:
@@ -37,6 +38,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - env:
+          OUTPUT1: ${{needs.job1.outputs.output1}}
+    
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh/
@@ -47,4 +51,4 @@ jobs:
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
       - name: copy builds to server
         run: |
-          rsync -vrm  .output/* ${{ secrets.USER_IP }}:/website/zedalite.de/html
+          rsync -vrm  $OUTPUT1/* ${{ secrets.USER_IP }}:/website/zedalite.de/html
