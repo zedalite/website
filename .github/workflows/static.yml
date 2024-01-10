@@ -52,5 +52,5 @@ jobs:
         with:
           name: static-website-files
       - name: Send files to host server
-      - run: |
+        run: |
           rsync --archive --verbose --stats . ${{ secrets.USER_IP }}:/home/quoteapp/website/zedalite.de/html
