@@ -53,7 +53,7 @@ jobs:
           name: static-website-files
       - shell: bash
         run: |
-          echo "ls"
+          ls
           
       # - name: copy builds to server
       #   run: |
