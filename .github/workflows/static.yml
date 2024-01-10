@@ -30,7 +30,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         id: artifact-upload-step
         with:
-          name: my-artifact
+          name: static-website-files
           path: 'build/'
 
   deploy:
@@ -48,4 +48,4 @@ jobs:
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
       - name: copy builds to server
         run: |
-          rsync -vrm  ${{needs.job1.outputs.output1}}/* ${{ secrets.USER_IP }}:/website/zedalite.de/html
+          rsync -vrm  ${{needs.job1.outputs.output1}}/* ${{ secrets.USER_IP }}:/home/quoteapp/website/zedalite.de/html
