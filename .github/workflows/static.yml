@@ -47,15 +47,9 @@ jobs:
           chmod 600 ~/.ssh/id_rsa.pub
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
 
-      - name: Download Server Files
+      - name: Send Website Files to Server
         uses: actions/download-artifact@v4
         with:
           name: static-website-files
-      - shell: bash
-        run: |
-          ls
-          
-      # - name: copy builds to server
-      #   run: |
-      #     echo "Location of files is: $SERVER_FILES"
-      #     rsync -vr  $SERVER_FILES/* ${{ secrets.USER_IP }}:/home/quoteapp/website/zedalite.de/html
+      - run: |
+          rsync -vr /* ${{ secrets.USER_IP }}:/home/quoteapp/website/zedalite.de/html
