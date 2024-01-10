@@ -46,10 +46,16 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa.pub
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
-      - env:
-          SERVER_FILES: ${{needs.job1.outputs.output1}}
-        run: echo "Artifact ID from previous job is $SERVER_FILES"
-      - name: copy builds to server
+
+      - name: Download Server Files
+        uses: actions/download-artifact@v4
+        with:
+          name: static-website-files
+      - shell: bash
         run: |
-          echo "Location of files is: $SERVER_FILES"
-          rsync -vr  $SERVER_FILES/* ${{ secrets.USER_IP }}:/home/quoteapp/website/zedalite.de/html
+          echo "ls"
+          
+      # - name: copy builds to server
+      #   run: |
+      #     echo "Location of files is: $SERVER_FILES"
+      #     rsync -vr  $SERVER_FILES/* ${{ secrets.USER_IP }}:/home/quoteapp/website/zedalite.de/html
